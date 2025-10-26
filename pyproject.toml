@@ -1,0 +1,13 @@
+[tool.poetry]
+name = 'MRO_project'
+version = '0.1.0'
+description = 'MRO system project'
+authors = ['Daniskin <danis_90@mail.ru>']
+package-mode = false
+
+[tool.poetry.dependencies]
+python = '^3.11'
+fastapi = "^0.120.0"
+uvicorn = {extras = ["standart"], version = "^0.38.0"}
+pydantic = {extras = ["email"], version = "^2.12.3"}
+pydantic-settings = "^2.11.0"
