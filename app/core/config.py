@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=os.path.join(project_root, ".env"),
         env_nested_delimiter="__",
-        env_prefix="APP_CONFIG__",   # <<-- ВАЖНО: точный префикс с двойным подчёркиванием
+        env_prefix="APP_CONFIG__",
         case_sensitive=False,
     )
     api: ApiPrefix = ApiPrefix()
