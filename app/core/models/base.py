@@ -1,7 +1,7 @@
-from sqlalchemy.orm import declarative_base, Mapped, mapped_column, declared_attr
+from sqlalchemy.orm import Mapped, mapped_column, declared_attr, DeclarativeBase
 from app.utils.case_converter import camel_to_snake_case
 
-class Base(declarative_base):
+class Base(DeclarativeBase):
     __abstract__ = True
 
     @declared_attr.directive

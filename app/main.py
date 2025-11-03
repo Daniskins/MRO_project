@@ -31,7 +31,7 @@ async def say_hello(name: str):
     return {"message": f"Hello {name}"}
 
 if __name__ == "__main__":
-    uvicorn.run(main_app,
+    uvicorn.run("main:main_app",
                 host=settings.run.host,
                 port=settings.run.port,
                 reload=True)
