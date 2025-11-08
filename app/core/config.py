@@ -3,7 +3,6 @@ from pydantic import BaseModel, PostgresDsn, Field
 import os
 from dotenv import load_dotenv
 
-# load .env (если нужно)
 project_root = os.path.dirname(os.path.dirname(__file__))
 load_dotenv(os.path.join(project_root, ".env"))
 

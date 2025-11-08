@@ -4,11 +4,11 @@ from app.core.models.plane import Plane
 from app.schemas.plane import PlaneCreate, PlaneUpdate
 
 async def create_plane(session: AsyncSession, data: PlaneCreate) -> Plane:
-    object = Plane(**data.model_dump())
-    session.add(object)
+    plane_obj = Plane(**data.model_dump())
+    session.add(plane_obj)
     await session.flush()
-    await session.refresh(object)
-    return object
+    await session.refresh(plane_obj)
+    return plane_obj
 
 async def get_plane(session: AsyncSession, plane_id: int) -> Plane | None:
     result = await session.execute(select(Plane).where(Plane.id == plane_id))
