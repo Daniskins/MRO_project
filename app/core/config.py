@@ -6,13 +6,8 @@ from dotenv import load_dotenv
 project_root = os.path.dirname(os.path.dirname(__file__))
 load_dotenv(os.path.join(project_root, ".env"))
 
-class ApiV1Prefix(BaseModel):
-    prefix: str = "/v1"
-    users: str = "/users"
-
 class ApiPrefix(BaseModel):
     prefix: str = "/api"
-    v1: ApiV1Prefix = ApiV1Prefix()
 
 class RunConfig(BaseModel):
     host: str = "0.0.0.0"
