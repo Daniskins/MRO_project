@@ -16,14 +16,6 @@ main_app = FastAPI(lifespan=lifespan)
 main_app.include_router(api_router,
                         prefix=settings.api.prefix)
 
-@main_app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-
-@main_app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
 
 if __name__ == "__main__":
     uvicorn.run("main:main_app",

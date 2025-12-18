@@ -22,7 +22,7 @@ async def list_plane_ep(limit: int=100, offset: int=0, session: AsyncSession = D
 
 @router.get('/{plane_id}', response_model=PlaneRead)
 async def get_plane_ep(plane_id: int, session: AsyncSession = Depends(get_session)):
-    obj = get_plane(session, plane_id)
+    obj = await get_plane(session, plane_id)
     if not obj:
         raise HTTPException(status_code=404, detail='Plane not found')
     return obj
