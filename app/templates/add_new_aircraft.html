@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Добавить новый борт — MRO Dashboard</title>
+  <link rel="stylesheet" href="/static/css/add_new_aircraft.css"/>
+</head>
+<body>
+  <div class="container">
+    <h1>Добавить новый борт</h1>
+    <form id="addAircraftForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="registration">Заводской номер самолета <span style="color:red">*</span></label>
+          <input type="text" id="registration" name="registration" placeholder="Например: 90090007007" required />
+        </div>
+        <div class="form-group">
+          <label for="aircraftType">Тип самолёта <span style="color:red">*</span></label>
+          <select id="aircraftType" name="aircraftType" required>
+            <option value="">Выберите тип</option>
+            <option value="СУ-35">СУ-35</option>
+            <option value="СУ-57">СУ-57</option>
+            <option value="СУ-34">СУ-34</option>
+            <!-- другие типы -->
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="modelVersion">Бортовой номер самолета</label>
+          <input type="text" id="modelVersion" name="modelVersion" placeholder="Например: КН-07, 902, 77" />
+        </div>
+        <div class="form-group">
+          <label for="operator">Принадлежность самолета <span style="color:red">*</span></label>
+          <input type="text" id="operator" name="operator" placeholder="Например: в/ч 77984, г/п 012" required />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="initialHours">Наработка СНЭ (часы) при вводе в систему</label>
+          <input type="number" id="initialHours" name="initialHours" min="0" placeholder="0" />
+        </div>
+        <div class="form-group">
+          <label for="operator">Аэродром базирования <span style="color:red">*</span></label>
+          <input type="text" id="aerodrom_base" name="aerodrom_base" placeholder="Например: Дземги, Ахтубинск" required />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="entryDate">Дата выпуска</label>
+          <input type="date" id="entryDate" name="entryDate" />
+        </div>
+        <div class="form-group">
+          <label for="weightGroup">Весовая группа</label>
+          <select id="weightGroup" name="weightGroup">
+            <option value="">Выберите группу</option>
+            <option value="Light">Лёгкая</option>
+            <option value="Medium">Средняя</option>
+            <option value="Heavy">Тяжёлая</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group" style="flex: 1;">
+          <label for="configuration">Конфигурация оборудования / комплектация</label>
+          <input type="text" id="configuration" name="configuration" placeholder="Например: Standard / Modified / Custom и др." />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="notes">Дополнительная информация / Примечания</label>
+        <textarea id="notes" name="notes" rows="4" placeholder="Заметки..."></textarea>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-secondary" onclick="window.history.back()">Отмена</button>
+        <button type="submit" class="btn btn-primary">Сохранить борт</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="/static/js/add_new_aircraft.js"></script>
+</body>
+</html>
