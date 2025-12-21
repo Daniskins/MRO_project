@@ -11,4 +11,4 @@ class Plane(Base):
     base_airfield: Mapped[str] = mapped_column(String(100)) #Например, Алжир, Уфа или Москва
     belong_plane: Mapped[str] = mapped_column(String(100)) #Например, Аэрофлот или Ростех
     operating_time: Mapped[int] = mapped_column(Integer)
-    manufacturer_date: Mapped[datetime] = mapped_column(Date) #Дата выпуска самолета
+    manufacturer_date: Mapped[datetime | None] = mapped_column(Date, nullable=False) #Дата выпуска самолета
