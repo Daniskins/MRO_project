@@ -9,6 +9,7 @@ from app.core.paths import STATIC_DIR
 
 from app.routers.plane import router as api_plane
 from app.routers.web.dashboard import router as dashboard_router
+from app.routers.web.add_new_aircraft import router as add_aircraft_router
 
 
 @asynccontextmanager
@@ -23,6 +24,7 @@ main_app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 main_app.include_router(api_plane,
                         prefix=settings.api.prefix)
 main_app.include_router(dashboard_router)
+main_app.include_router(add_aircraft_router)
 
 
 if __name__ == "__main__":
