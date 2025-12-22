@@ -8,7 +8,7 @@ from app.crud.plane import create_plane, get_plane, list_planes, update_plane, d
 
 router = APIRouter(prefix='/planes', tags=['planes'])
 
-async def get_session() -> AsyncGenerator:
+async def get_session() -> AsyncGenerator[AsyncSession, None]:
     async with db_helper.session_factor() as session:
         try:
             yield session
@@ -33,7 +33,7 @@ async def get_plane_ep(plane_id: int, session: AsyncSession = Depends(get_sessio
         raise HTTPException(status_code=404, detail='Plane not found')
     return obj
 
-@router.put('/{plane_id}', response_model=PlaneRead)
+@router.patch('/{plane_id}', response_model=PlaneRead)
 async def update_plane_ep(plane_id: int, payload: PlaneUpdate, session: AsyncSession = Depends(get_session)):
     obj = await update_plane(session, plane_id, payload)
     if not obj:
