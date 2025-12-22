@@ -18,18 +18,28 @@ class DatabaseHelper:
             pool_size=pool_size,
             max_overflow=max_overflow
         )
-        self.session_factor : async_sessionmaker[AsyncSession] = async_sessionmaker(
+        self.session_factor: async_sessionmaker[AsyncSession] = async_sessionmaker(
             bind=self.engine,
             expire_on_commit=False,
             autocommit=False,
             autoflush=False
         )
+
     async def dispose(self) -> None:
         await self.engine.dispose()
 
     async def session_getter(self) -> AsyncGenerator[AsyncSession, None]:
         async with self.session_factor() as session:
             yield session
+
+    async def get_session(self) -> AsyncGenerator[AsyncSession, None]:
+        async with self.session_factor() as session:
+            try:
+                yield session
+                await session.commit()
+            except Exception:
+                await session.rollback()
+                raise
 
 
 db_helper = DatabaseHelper(

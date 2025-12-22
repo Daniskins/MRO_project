@@ -17,7 +17,7 @@ async def lifespan(app: FastAPI):
     #startup
     yield
     #shutdown
-    db_helper.dispose()
+    await db_helper.dispose()
 
 main_app = FastAPI(lifespan=lifespan)
 main_app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
