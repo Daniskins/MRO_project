@@ -1,5 +1,5 @@
 from starlette.templating import Jinja2Templates
 
-from app.core.paths import TEMPLATES_DIR
+from app.core.config import settings
 
-templates = Jinja2Templates(directory=TEMPLATES_DIR)
+templates = Jinja2Templates(directory=settings.paths.templates_dir)

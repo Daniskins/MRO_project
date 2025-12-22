@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete, update
-from app.core.models.plane import Plane
+from app.models.plane import Plane
 from app.schemas.plane import PlaneCreate, PlaneUpdate
 
 async def create_plane(session: AsyncSession, data: PlaneCreate) -> Plane:

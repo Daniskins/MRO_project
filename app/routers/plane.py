@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.models.db_helper import db_helper
+from app.database.db_helper import db_helper
 from app.schemas.plane import PlaneCreate, PlaneRead, PlaneUpdate
 from app.crud.plane import create_plane, get_plane, list_planes, update_plane, delete_plane
 

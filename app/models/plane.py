@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import String, Date, Integer
 
-from app.core.models.base import Base
+from app.models.base import Base
 
 class Plane(Base):
     type_plane: Mapped[str] = mapped_column(String(10)) #Например, Су-57, Су-35 или Суперджет

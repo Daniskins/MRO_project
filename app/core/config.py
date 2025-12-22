@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import BaseModel, PostgresDsn, Field
+from pydantic import BaseModel, PostgresDsn
 import os
 from dotenv import load_dotenv
 
@@ -26,6 +26,10 @@ class DatabaseConfig(BaseModel):
     pool_size: int = 50
     max_overflow: int = 10
 
+class PathConfig(BaseModel):
+    templates_dir: str = os.path.join(project_root, "templates")
+    static_dir: str = os.path.join(project_root, "static")
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=os.path.join(project_root, ".env"),
@@ -36,5 +40,8 @@ class Settings(BaseSettings):
     api: ApiPrefix = ApiPrefix()
     run: RunConfig = RunConfig()
     db: DatabaseConfig
+    paths: PathConfig = PathConfig()
 
 settings = Settings()
+
+print(settings.paths.static_dir)
