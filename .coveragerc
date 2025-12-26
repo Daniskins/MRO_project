@@ -1,0 +1,27 @@
+[run]
+branch = True
+source = app
+relative_files = True
+
+omit =
+    */__init__.py
+    */migrations/*
+    */alembic/*
+    .venv/*
+    tests/*
+
+    app/main.py
+    app/static/*
+    app/templates/*
+    app/routers/web/*
+
+[report]
+show_missing = True
+skip_covered = True
+precision = 1
+
+exclude_lines =
+    pragma: no cover
+    if __name__ == .__main__.:
+    raise NotImplementedError
+    @abstractmethod
