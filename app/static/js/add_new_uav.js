@@ -1,8 +1,8 @@
 
 (() => {
-  const endpoint = "/api/planes";
+  const endpoint = "/api/uavs";
 
-  const form = document.getElementById("addAircraftForm");
+  const form = document.getElementById("addUavForm");
   const submitBtn = form.querySelector('button[type="submit"]');
 
   function showMessage(text, type="info") {
@@ -25,20 +25,21 @@
     const fd = new FormData(formEl);
     const raw = Object.fromEntries(fd.entries());
 
-    // Маппинг под PlaneCreate
+    // Маппинг под UavCreate
     return {
-      type_plane: raw.aircraftType?.trim(),               // REQUIRED
-      serial_number: raw.registration?.trim(),            // REQUIRED (заводской номер)
-      tail_number: raw.modelVersion?.trim(),              // REQUIRED? (зависит от твоей схемы)
-      base_airfield: raw.aerodrom_base?.trim(),           // REQUIRED
-      belong_plane: raw.operator?.trim(),                 // REQUIRED
-      operating_time: raw.initialHours ? Number(raw.initialHours) : 0, // REQUIRED (int)
-      manufacturer_date: raw.entryDate || null            // date | null (YYYY-MM-DD)
+      uav_model: raw.uavModel?.trim(),                       // REQUIRED
+      serial_number: raw.serialNumber?.trim(),                // REQUIRED
+      tail_number: raw.tailNumber?.trim(),                    // REQUIRED (есть значение по умолчанию)
+      base_location: raw.baseLocation?.trim(),                // REQUIRED
+      operator: raw.operator?.trim(),                         // REQUIRED
+      status: raw.status || "active",
+      total_operating_time: raw.initialHours ? Number(raw.initialHours) : 0, // REQUIRED (int)
+      manufacture_date: raw.manufactureDate || null           // date | null (YYYY-MM-DD)
     };
   }
 
   function validate(payload) {
-    const required = ["type_plane", "serial_number", "base_airfield", "belong_plane", "operating_time"];
+    const required = ["uav_model", "serial_number", "base_location", "operator"];
     for (const k of required) {
       if (payload[k] === null || payload[k] === undefined || String(payload[k]).trim() === "") {
         showMessage(`Поле "${k}" обязательно.`, "error");
@@ -46,18 +47,12 @@
       }
     }
 
-    if (Number.isNaN(payload.operating_time)) {
-      showMessage('Поле "operating_time" должно быть числом.', "error");
+    if (Number.isNaN(payload.total_operating_time)) {
+      showMessage('Поле "total_operating_time" должно быть числом.', "error");
       return false;
     }
-    if (payload.operating_time < 0) {
-      showMessage('Поле "operating_time" не может быть отрицательным.', "error");
-      return false;
-    }
-
-    // Если tail_number обязателен в схеме — добавь проверку:
-    if (!payload.tail_number || payload.tail_number.trim() === "") {
-      showMessage('Поле "tail_number" (бортовой номер) обязательно.', "error");
+    if (payload.total_operating_time < 0) {
+      showMessage('Поле "total_operating_time" не может быть отрицательным.', "error");
       return false;
     }
 
@@ -84,12 +79,11 @@
 
       if (resp.ok) {
         const data = await resp.json().catch(() => null);
-        showMessage("Борт успешно добавлен.", "success");
+        showMessage("БПЛА успешно добавлен.", "success");
 
-        // PlaneRead возвращает id
+        // UavRead возвращает id
         if (data?.id != null) {
-          // UI страница борта (не API)
-          setTimeout(() => (window.location.href = `/planes/${data.id}`), 600);
+          setTimeout(() => (window.location.href = `/uavs/${data.id}`), 600);
         } else {
           form.reset();
         }

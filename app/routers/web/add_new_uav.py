@@ -3,11 +3,11 @@ from fastapi.responses import HTMLResponse
 
 from app.core.templates import templates
 
-router = APIRouter(prefix='/planes', tags=['planes', 'web'])
+router = APIRouter(prefix='/uavs', tags=['uavs', 'web'])
 
 
 @router.get('/new', response_class=HTMLResponse)
-async def add_new_aircraft_form(request: Request):
-    return templates.TemplateResponse('add_new_aircraft.html',
+async def add_new_uav_form(request: Request):
+    return templates.TemplateResponse('add_new_uav.html',
                                       {'request': request}
                                       )

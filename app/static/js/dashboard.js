@@ -1,12 +1,12 @@
   // ====== Минимальный JS: заглушки + точка расширения под ваши API ======
-// Если у тебя эндпоинт другой (например /api/planes/), поменяй тут:
-const API_PLANES = "/api/planes";
+// Если у тебя эндпоинт другой (например /api/uavs/), поменяй тут:
+const API_UAVS = "/api/uavs";
 
-// Заглушки для задач (потом заменишь на /api/work-orders, /api/inspections и т.д.)
+// Заглушки для задач (потом заменишь на /api/maintenance-records, /api/maintenance-types и т.д.)
 const mockTasks = [
-  { title: "Проверить сроки инспекций по флоту", meta: "3 позиции требуют внимания", priority: "warn", link: "/reports" },
-  { title: "Склад: минимальные остатки по критическим деталям", meta: "2 позиции low stock", priority: "warn", link: "/inventory" },
-  { title: "Work Orders: ожидают подтверждения", meta: "1 заказ на ревью", priority: "ok", link: "/work-orders" },
+  { title: "Проверить сроки ТО по парку БПЛА", meta: "3 аппарата требуют внимания", priority: "warn", link: "/reports" },
+  { title: "БПЛА близки к порогу наработки для ТО-1", meta: "2 аппарата в зоне риска", priority: "warn", link: "/maintenance-records" },
+  { title: "Журнал наработки: новые вылеты без подтверждения", meta: "1 запись на ревью", priority: "ok", link: "/operating-time-logs" },
 ];
 
 function formatNow() {
@@ -44,16 +44,16 @@ function renderFleetRows(items) {
   tbody.innerHTML = "";
 
   items.slice(0, 12).forEach(p => {
-    // Подстрой имена полей под твою схему PlaneRead.
-    const model = p.model ?? p.aircraft_type ?? "—";
+    // Подстрой имена полей под твою схему UavRead.
+    const model = p.uav_model ?? p.model ?? "—";
     const tail = p.tail_number ?? p.registration ?? p.board_number ?? "—";
     const msn  = p.serial_number ?? p.msn ?? "—";
-    const fh   = p.flight_hours ?? p.fh ?? p.hours ?? "—";
-    const st   = (p.status ?? "OK").toString();
+    const fh   = p.total_operating_time ?? p.flight_hours ?? p.hours ?? "—";
+    const st   = (p.status ?? "active").toString();
 
     let dot = "ok";
-    if (st.toLowerCase().includes("aog") || st.toLowerCase().includes("critical")) dot = "bad";
-    if (st.toLowerCase().includes("due") || st.toLowerCase().includes("warn")) dot = "warn";
+    if (st.toLowerCase().includes("decommission") || st.toLowerCase().includes("critical")) dot = "bad";
+    if (st.toLowerCase().includes("maintenance") || st.toLowerCase().includes("due")) dot = "warn";
 
     const tr = document.createElement("tr");
     tr.innerHTML = `
@@ -62,7 +62,7 @@ function renderFleetRows(items) {
       <td>${msn}</td>
       <td>${fh}</td>
       <td><span class="status"><span class="dot ${dot}"></span>${st}</span></td>
-      <td><a class="link" href="/planes/${p.id ?? ""}">Открыть</a></td>
+      <td><a class="link" href="/uavs/${p.id ?? ""}">Открыть</a></td>
     `;
     tbody.appendChild(tr);
   });
@@ -76,7 +76,7 @@ function setupFleetSearch(all) {
 
     const filtered = all.filter(p => {
       const values = [
-        p.model, p.aircraft_type, p.tail_number, p.registration, p.board_number, p.serial_number, p.msn
+        p.uav_model, p.model, p.tail_number, p.registration, p.board_number, p.serial_number, p.msn
       ].filter(Boolean).map(v => String(v).toLowerCase());
       return values.some(v => v.includes(q));
     });
@@ -86,25 +86,25 @@ function setupFleetSearch(all) {
 
 async function loadFleet() {
   try {
-    const resp = await fetch(API_PLANES);
+    const resp = await fetch(API_UAVS);
     if (!resp.ok) throw new Error("HTTP " + resp.status);
-    const planes = await resp.json();
+    const uavs = await resp.json();
 
-    setKpi("kpi-fleet", Array.isArray(planes) ? planes.length : "—");
+    setKpi("kpi-fleet", Array.isArray(uavs) ? uavs.length : "—");
 
     // Остальные KPI пока заглушки
     setKpi("kpi-aog", "0");
     setKpi("kpi-overdue", "0");
     setKpi("kpi-lowstock", "0");
 
-    const list = Array.isArray(planes) ? planes : [];
+    const list = Array.isArray(uavs) ? uavs : [];
     renderFleetRows(list);
     setupFleetSearch(list);
   } catch (e) {
     const demo = [
-      { id: 1, model: "Sukhoi Superjet 100", tail_number: "RA-89001", serial_number: "95101", flight_hours: 12450, status: "OK" },
-      { id: 2, model: "Су-35", tail_number: "902", serial_number: "49083507902", flight_hours: 12500, status: "DUE" },
-      { id: 3, model: "Су-57", tail_number: "35", serial_number: "9009005535", flight_hours: 5000, status: "AOG" },
+      { id: 1, uav_model: "Орлан-10", tail_number: "КН-07", serial_number: "95101", total_operating_time: 245, status: "active" },
+      { id: 2, uav_model: "ZALA 421-16E", tail_number: "902", serial_number: "49083507902", total_operating_time: 512, status: "in_maintenance" },
+      { id: 3, uav_model: "Суперкам S350", tail_number: "35", serial_number: "9009005535", total_operating_time: 50, status: "active" },
     ];
     setKpi("kpi-fleet", demo.length);
     setKpi("kpi-aog", "1");
