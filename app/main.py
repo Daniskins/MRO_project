@@ -6,9 +6,12 @@ from contextlib import asynccontextmanager
 from app.database.db_helper import db_helper
 from app.core.config import settings
 
-from app.routers.plane import router as api_plane
+from app.routers.uav import router as api_uav
+from app.routers.operating_time_log import router as api_operating_time_log
+from app.routers.maintenance_type import router as api_maintenance_type
+from app.routers.maintenance_record import router as api_maintenance_record
 from app.routers.web.dashboard import router as dashboard_router
-from app.routers.web.add_new_aircraft import router as add_aircraft_router
+from app.routers.web.add_new_uav import router as add_uav_router
 
 
 @asynccontextmanager
@@ -20,10 +23,12 @@ async def lifespan(app: FastAPI):
 
 main_app = FastAPI(lifespan=lifespan)
 main_app.mount('/static', StaticFiles(directory=settings.paths.static_dir), name="static")
-main_app.include_router(api_plane,
-                        prefix=settings.api.prefix)
+main_app.include_router(api_uav, prefix=settings.api.prefix)
+main_app.include_router(api_operating_time_log, prefix=settings.api.prefix)
+main_app.include_router(api_maintenance_type, prefix=settings.api.prefix)
+main_app.include_router(api_maintenance_record, prefix=settings.api.prefix)
 main_app.include_router(dashboard_router)
-main_app.include_router(add_aircraft_router)
+main_app.include_router(add_uav_router)
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MRO EngineTrack — Главная</title>
+  <title>MRO UavTrack — Главная</title>
   <link rel="stylesheet" href="/static/css/dashboard.css" />
 </head>
 <body>
@@ -11,16 +11,16 @@
     <div class="container">
       <div class="topbar">
         <div class="brand">
-          <div class="name">EngineTrack</div>
-          <div class="tag">Флот • Обслуживание • Комплектующие • Учет ресурсов</div>
+          <div class="name">UavTrack</div>
+          <div class="tag">Парк БПЛА • ТО • Наработка • Учет ресурсов</div>
         </div>
 
         <nav aria-label="Основная навигация">
           <ul>
             <li><a class="active" href="/">Dashboard</a></li>
-            <li><a href="/planes">Самолёты</a></li>
-            <li><a href="/work-orders">План работ</a></li>
-            <li><a href="/inventory">Склад</a></li>
+            <li><a href="/uavs">БПЛА</a></li>
+            <li><a href="/maintenance-records">ТО</a></li>
+            <li><a href="/operating-time-logs">Наработка</a></li>
             <li><a href="/reports">Отчёты</a></li>
             <li><a href="/settings">Настройки</a></li>
           </ul>
@@ -34,15 +34,15 @@
       <div>
         <h1>Главная панель</h1>
         <div class="sub">
-          Быстрый обзор по флоту, работам и складу. На первом этапе это “минимально полезный” дашборд:
-          счётчики, список ближайших задач и быстрый переход к бортам.
+          Быстрый обзор по парку БПЛА, наработке и срокам ТО. На первом этапе это “минимально полезный” дашборд:
+          счётчики, список ближайших ТО и быстрый переход к аппаратам.
         </div>
       </div>
 
       <div class="actions">
-        <button class="btn btn-primary" onclick="location.href='/planes/new'">➕ Добавить борт</button>
-        <button class="btn btn-ghost" onclick="location.href='/work-orders/new'">🛠 Создать задачу</button>
-        <button class="btn btn-ghost" onclick="location.href='/inventory/receive'">Добавлю в будущем(dev)</button>
+        <button class="btn btn-primary" onclick="location.href='/uavs/new'">➕ Добавить БПЛА</button>
+        <button class="btn btn-ghost" onclick="location.href='/maintenance-records/new'">🛠 Зафиксировать ТО</button>
+        <button class="btn btn-ghost" onclick="location.href='/operating-time-logs/new'">Добавлю в будущем(dev)</button>
       </div>
     </div>
 
@@ -58,24 +58,24 @@
       <div class="card-body">
         <div class="kpi-grid">
           <div class="kpi">
-            <div class="label">Самолётов в эксплуатации <span class="chip">Флот</span></div>
+            <div class="label">БПЛА в эксплуатации <span class="chip">Парк</span></div>
             <div class="value" id="kpi-fleet">—</div>
-            <div class="hint">Всего активных бортов</div>
+            <div class="hint">Всего активных аппаратов</div>
           </div>
           <div class="kpi">
-            <div class="label">AOG <span class="chip">Критический</span></div>
+            <div class="label">На обслуживании <span class="chip">Критический</span></div>
             <div class="value" id="kpi-aog">—</div>
-            <div class="hint">Борт на земле/критические ограничения</div>
+            <div class="hint">БПЛА выведены из эксплуатации на ТО</div>
           </div>
           <div class="kpi">
-            <div class="label">Просроченные инспекции <span class="chip">Due</span></div>
+            <div class="label">Просроченное ТО <span class="chip">Due</span></div>
             <div class="value" id="kpi-overdue">—</div>
-            <div class="hint">Сроки ТО/инспекций</div>
+            <div class="hint">Сроки ТО по наработке/календарю</div>
           </div>
           <div class="kpi">
-            <div class="label">Детали low stock <span class="chip">Inventory</span></div>
+            <div class="label">Наработка за неделю <span class="chip">Логи</span></div>
             <div class="value" id="kpi-lowstock">—</div>
-            <div class="hint">Минимальные остатки</div>
+            <div class="hint">Суммарные часы по журналу наработки</div>
           </div>
         </div>
         <div class="note" style="margin-top:10px;">
@@ -88,16 +88,16 @@
       <!-- Left: Fleet quick list -->
       <div class="card">
         <div class="card-header">
-          <h2>Флот — быстрый доступ</h2>
-          <a class="link" href="/planes">Открыть список →</a>
+          <h2>Парк БПЛА — быстрый доступ</h2>
+          <a class="link" href="/uavs">Открыть список →</a>
         </div>
         <div class="card-body">
           <div class="row" style="margin-bottom:12px;">
             <div class="search">
-              <input id="fleet-search" type="text" placeholder="Поиск по борту, модели, заводскому номеру..." />
+              <input id="fleet-search" type="text" placeholder="Поиск по борту, модели, серийному номеру..." />
               <span class="icon">🔎</span>
             </div>
-            <span class="chip">Источник: /api/planes</span>
+            <span class="chip">Источник: /api/uavs</span>
           </div>
 
           <div style="overflow:auto; border:1px solid var(--border); border-radius:12px;">
@@ -107,7 +107,7 @@
                   <th>Модель</th>
                   <th>Борт</th>
                   <th>Зав. №</th>
-                  <th>Налёт</th>
+                  <th>Наработка</th>
                   <th>Статус</th>
                   <th></th>
                 </tr>
@@ -119,7 +119,7 @@
           </div>
 
           <div class="note" style="margin-top:10px;">
-            Примечание: на первом этапе думаю будет достаточно 10–20 строк (последние/активные борта) + поиск.
+            Примечание: на первом этапе думаю будет достаточно 10–20 строк (последние/активные аппараты) + поиск.
           </div>
         </div>
       </div>
@@ -127,7 +127,7 @@
       <!-- Right: Tasks / Alerts -->
       <div class="card">
         <div class="card-header">
-          <h2>Ближайшие задачи и алерты</h2>
+          <h2>Ближайшее ТО и алерты</h2>
           <span class="chip">Next 7 days</span>
         </div>
         <div class="card-body">
@@ -136,7 +136,7 @@
           </ul>
 
           <div class="note" style="margin-top:10px;">
-            В будущем подключу реальные данные: инспекции, AD/SB, work orders, склад и сроки калибровки инструмента.
+            В будущем подключу реальные данные: /api/uavs/{id}/maintenance-status, журнал наработки и справочник видов ТО.
           </div>
         </div>
       </div>
@@ -144,7 +144,7 @@
   </main>
 
   <footer class="container">
-    <div>© <span id="year"></span> EngineTrack • MVP Dashboard</div>
+    <div>© <span id="year"></span> UavTrack • MVP Dashboard</div>
   </footer>
 
   <script src="/static/js/dashboard.js"></script>
